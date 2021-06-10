@@ -17,7 +17,7 @@ def color_producer(elevation):
 
 def radius_producer(elevation):
     if elevation <1000:
-        return 5
+        return 6
     elif 1000<=elevation <3000:
         return 10
     else:
@@ -33,7 +33,7 @@ map = folium.Map(location=[38.58, -99.09],zoom_start=5, tiles = "Stamen Terrain"
 fg = folium.FeatureGroup(name="My Map")
 for lt, ln, el, name in zip(lat, lon, elev, name):
     iframe = folium.IFrame(html=html % (name, name, el), width=200, height=100)
-    fg.add_child(folium.CircleMarker(location=[lt, ln],radius = radius_producer(el), popup=folium.Popup(iframe), color = color_producer(el),fill = True))
+    fg.add_child(folium.CircleMarker(location=[lt, ln],radius = radius_producer(el), popup=folium.Popup(iframe), color = color_producer(el),fill_color =color_producer(el), fill_opacity = 0.7))
 #fg.add_child(folium.Marker(location=[lt,ln],popup=str(el)+" m", icon = folium.Icon(color="green")))
 
 map.add_child(fg)
