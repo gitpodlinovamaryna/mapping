@@ -24,17 +24,19 @@ def radius_producer(elevation):
         return 15
 
 
-map = folium.Map(location=[38.58, -99.09],zoom_start=5, tiles = "Stamen Terrain")
+map = folium.Map(location=[38.58, -99.09],zoom_start=5, tiles = "cartodbpositron")
 #Stamen Terrain
-fg = folium.FeatureGroup(name="My Map")
+fgv = folium.FeatureGroup(name="Volcanoes")
 for lt, ln, el in zip(lat, lon, elev):
-    fg.add_child(folium.CircleMarker(location=[lt, ln],radius = radius_producer(el), popup=str(el) +" m", color = color_producer(el),fill_color =color_producer(el), fill_opacity = 0.7))
+    fgv.add_child(folium.CircleMarker(location=[lt, ln],radius = radius_producer(el), popup=str(el) +" m", color = color_producer(el),fill_color =color_producer(el), fill_opacity = 0.7))
 
 
+fgp = folium.FeatureGroup(name="Population")
+fgp.add_child(folium.GeoJson(data=json.load(open('world.json','r',encoding="utf-8-sig")),style_function=lambda x: {'fillColor':'green' if x['properties']['POP2005']< 10000000 else 'orange' if 10000000 <=x['properties']['POP2005']<20000000 else 'red' } ))
 
-fg.add_child(folium.GeoJson(data=json.load(open('world.json','r',encoding="utf-8-sig")),style_function=lambda x: {'fillColor':'green' if x['properties']['POP2005']< 10000000 else 'orange' if 10000000 <=x['properties']['POP2005']<20000000 else 'red' } ))
 
-
-map.add_child(fg)
+map.add_child(fgv)
+map.add_child(fgp)
+map.add_child(folium.LayerControl())
 
 map.save("Map1.html")
